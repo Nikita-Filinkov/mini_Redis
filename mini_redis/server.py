@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 import threading
@@ -104,9 +105,7 @@ class KeyValueStoreServicer(kvstore_pb2_grpc.KeyValueStoreServicer):
 
 def server():
     serve = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    kvstore_pb2_grpc.add_KeyValueStoreServicer_to_server(
-        KeyValueStoreServicer(), serve
-    )
+    kvstore_pb2_grpc.add_KeyValueStoreServicer_to_server(KeyValueStoreServicer(), serve)
     serve.add_insecure_port("[::]:50051")
     print("Server started on port 50051")
     serve.start()
