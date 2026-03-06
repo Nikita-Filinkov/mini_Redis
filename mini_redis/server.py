@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+
 import threading
 import time
 from collections import OrderedDict
@@ -5,7 +9,6 @@ from concurrent import futures
 
 import grpc
 
-# Импортируем сгенерированные модули
 import kvstore_pb2
 import kvstore_pb2_grpc
 
@@ -99,16 +102,16 @@ class KeyValueStoreServicer(kvstore_pb2_grpc.KeyValueStoreServicer):
         return kvstore_pb2.ListResponse(items=items)
 
 
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+def server():
+    serve = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     kvstore_pb2_grpc.add_KeyValueStoreServicer_to_server(
-        KeyValueStoreServicer(), server
+        KeyValueStoreServicer(), serve
     )
-    server.add_insecure_port("[::]:50051")
+    serve.add_insecure_port("[::]:50051")
     print("Server started on port 50051")
-    server.start()
-    server.wait_for_termination()
+    serve.start()
+    serve.wait_for_termination()
 
 
 if __name__ == "__main__":
-    serve()
+    server()

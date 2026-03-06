@@ -1,6 +1,4 @@
-def main():
-    print("Hello from mini-redis!")
-
+from mini_redis.server import server
 
 if __name__ == "__main__":
-    main()
+    server()

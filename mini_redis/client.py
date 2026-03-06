@@ -1,7 +1,12 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 import time
 import grpc
-import kvstore_pb2
-import kvstore_pb2_grpc
+from mini_redis import kvstore_pb2
+from mini_redis import kvstore_pb2_grpc
 
 
 def run():
