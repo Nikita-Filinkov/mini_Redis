@@ -1,21 +1,19 @@
 FROM python:3.11-slim
 
-RUN mkdir /app && \
-    addgroup --system --gid 1000 appuser && \
-    adduser --system --uid 1000 --ingroup appuser appuser && \
-    chown -R appuser:appuser /aggregator
-
 RUN pip install uv
 
+RUN addgroup --system --gid 1001 appgroup && \
+    adduser --system --uid 1001 --ingroup appgroup --home /home/appuser appuser
+
 WORKDIR /app
+RUN chown appuser:appgroup /app
 
-COPY pyproject.toml uv.lock* ./
-
-RUN uv sync --frozen
-
-COPY . .
+COPY --chown=appuser:appgroup pyproject.toml uv.lock* ./
 
 USER appuser
+
+RUN uv sync --frozen
+COPY --chown=appuser:appgroup . .
 
 EXPOSE 50051
 
